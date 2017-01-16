@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="bootstrap/css/mystile.css">
+<meta charset="UTF-8">
+<title>Banque</title>
+</head>
+<body ng-app="myBanqueApp" ng-controller="myBanqueController">
+<div class="col-md-6">
+<div class="panel panel-info  spacer">
+<div class="panel-heading">Compte</div>
+<div class="panel-body">
+<form >
+   <div class="form-group">
+   <label>Code Compte :</label>
+   <input type="text" ng-model="codeCompte">
+   <label class="bg-danger" ng-if="errorMessage=='compte inhexistant'">
+            {{errorMessage}}
+            </label>
+   <button ng-click="chargerCompte()">Charger</button>
+   
+   </div>
+</form>
+</div>
+</div>
+</div>
+
+<div ng-if="compte">
+  <div class="col-md-6">
+    <div class="panel panel-info spacer">
+       <div class="panel-heading"> etat du compte</div>
+       <div class="panel-body">
+            <div class="form-group">
+               <label>Solde :</label>
+               <label>{{compte.solde}}</label>
+            </div>
+            <div class="form-group">
+               <label>Date Creation :</label>
+               <label>{{compte.dateCreation|date:'yyyy/MM/dd - HH:mm:ss'}}</label>
+            </div>
+            <div ng-if="compte.taux">
+                  <div class="form-group">
+               <label>Taux :</label>
+               <label>{{compte.taux}}</label>
+                  </div>
+            </div>
+            <div ng-if="compte.decouvert">
+                  <div class="form-group">
+               <label>Decouvert :</label>
+               <label>{{compte.decouvert}}</label>
+                  </div>
+            </div>
+       </div>
+    </div>
+  </div>
+ 
+  <div class="col-md-6">
+    <div class="panel panel-info spacer">
+       <div class="panel-heading"> Operations</div>
+       <div class="panel-body">
+            <form>
+                <div class="form-group">
+                  <label>Versement :</label>
+                  <input type="radio" ng-model="operation.type" value="versement">
+                  <label>Retrait :</label>
+                  <input type="radio" ng-model="operation.type" value="retrait">
+                  <label>Virement :</label>
+                  <input type="radio" ng-model="operation.type" value="virement">
+                </div>
+                <div class="form-group">
+                  <label>Montant :</label>
+                  <input type="text" ng-model="operation.montant">
+                  <label class="bg-danger" ng-if="errorMessage">
+            {{errorMessage}}
+            </label>
+                </div>
+                <span ng-if="operation.type=='virement'">
+                <div class="form-group">
+                  <label>vers le compte :</label>
+                  <input type="text" ng-model="operation.cpte2">
+                </div>
+                </span>
+                <button class="btn btn-primary" ng-click="saveOperation()">Save</button>
+            </form>
+            
+            
+       </div>
+ 
+    </div> 
+  </div>
+  
+  <div class="col-md-6">
+    <div class="panel panel-info spacer">
+      <div class="panel-heading">Operations de compte</div>
+      <div class="panel-body">
+        <table class="table table-striped">
+        <thead>
+        <tr>
+        <th>Num </th><th>Date</th><th>Montant</th><th>type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="op in pageOperations.operations">
+        <td>{{op.numeroOperation}}</td>
+        <td>{{op.dateOperation|date:'yyyy/MM/dd - HH:mm:ss'}}</td>
+        <td>{{op.montant}}</td>
+        <td>{{op.type}}</td>
+        </tr>
+        </tbody>
+        </table>
+      
+      </div>
+    
+     <div class="container">
+        <ul class="nav nav-pills">
+            <li class="clickable" ng-class="{active:$index==pageCourant}" ng-repeat="p in pages track by $index">
+             <a ng-click="gotopage($index)">{{$index}}</a>
+             </li>
+        </ul>
+     </div>
+    
+    
+    </div>
+    
+  
+  </div>
+ 
+ 
+ 
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="angular/angular.min.js"></script>
+<script type="text/javascript" src="js/myApp.js"></script>
+
+</body>
+</html>
